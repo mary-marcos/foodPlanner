@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.foodplanner.view.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchMealFragment"
+        android:name="com.example.foodplanner.view.search_meal.SearchMealFragment"
+        android:label="search"
+        tools:layout="@layout/fragment_search_meal">
+        <action
+            android:id="@+id/action_searchMealFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_searchMealFragment_to_mealFragment"
+            app:destination="@id/mealFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteMealsFragment"
+        android:name="com.example.foodplanner.view.fav_meal.FavoriteMealsFragment"
+        android:label="your favorite meals"
+        tools:layout="@layout/fragment_favorite_meals">
+        <action
+            android:id="@+id/action_favoriteMealsFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.example.foodplanner.view.calender.CalenderFragment"
+        android:label="Calander"
+        tools:layout="@layout/fragment_calender">
+        <action
+            android:id="@+id/action_calenderFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_calenderFragment_to_bottomSheetFragment"
+            app:destination="@id/bottomSheetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealDetailsFragment"
+        android:name="com.example.foodplanner.view.meal_details.MealDetailsFragment"
+        android:label="Meal Details"
+        tools:layout="@layout/fragment_meal_details" />
+    <fragment
+        android:id="@+id/mealFragment"
+        android:name="com.example.foodplanner.view.meal_by_category.MealFragment"
+        android:label="Categories"
+        tools:layout="@layout/fragment_meal" />
+    <fragment
+        android:id="@+id/bottomSheetFragment"
+        android:name="com.example.foodplanner.view.bottom_sheet.BottomSheetFragment"
+        android:label="fragment_bottom_sheet"
+        tools:layout="@layout/fragment_bottom_sheet" />
+</navigation>
