@@ -7,4 +7,5 @@ import java.util.List;
 public interface CategoryDetailsCallback {
     public void onSuccessResult(List<ListsDetailsBy> categoryDetailsList);
     public void onFailureResult(String errorMsg);
+
 }

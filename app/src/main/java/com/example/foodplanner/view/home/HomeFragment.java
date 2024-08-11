@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.api.MealRemoteDataSourceImpl;
+import com.example.foodplanner.db.MealLocalDataSourceImp;
 import com.example.foodplanner.model.dto.CategoriesItem;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.HomePresenter;
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment implements HomeView,OnCategoryClickLi
 //        homePresenter.getCountries();
 //        Log.e("TAG", "onViewCreated: ");
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
-homePresenter=new HomePresenter(this,MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance()));
+homePresenter=new HomePresenter(this,MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance(), MealLocalDataSourceImp.getInstance(this.getContext()) ));
 
 
 

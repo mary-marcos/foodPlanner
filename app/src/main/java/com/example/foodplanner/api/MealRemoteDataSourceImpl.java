@@ -2,6 +2,7 @@ package com.example.foodplanner.api;
 
 import com.example.foodplanner.model.dto.CategoryResponse;
 import com.example.foodplanner.model.dto.ListsDetailsbyResponse;
+import com.example.foodplanner.model.dto.MealsDetailResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -67,6 +68,13 @@ public class MealRemoteDataSourceImpl //implements MealRemoteDataSource
 
     public Single<ListsDetailsbyResponse> CategoryDetailsNetworkCall(String category) {
         return mealService.getMealsByCategory(category)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Single<MealsDetailResponse> getMealDetailNetworkCall(String name) {
+        return mealService.getMealById(name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -2,6 +2,7 @@ package com.example.foodplanner.api;
 
 import com.example.foodplanner.model.dto.CategoryResponse;
 import com.example.foodplanner.model.dto.ListsDetailsbyResponse;
+import com.example.foodplanner.model.dto.MealsDetailResponse;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -18,4 +19,8 @@ public interface WebService {
 
     @GET("filter.php")
     public Single<ListsDetailsbyResponse> getMealsByCategory(@Query("c") String category);
+
+    @GET("lookup.php")
+    public Single<MealsDetailResponse> getMealById(@Query("i") String id);
+
 }

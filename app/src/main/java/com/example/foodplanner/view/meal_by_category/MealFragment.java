@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,12 +20,14 @@ import android.widget.Toast;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.api.MealRemoteDataSourceImpl;
+import com.example.foodplanner.db.MealLocalDataSourceImp;
 import com.example.foodplanner.model.dto.CategoriesItem;
 import com.example.foodplanner.model.dto.ListsDetailsBy;
 import com.example.foodplanner.model.dto.ListsDetailsbyResponse;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.MealPresenter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +35,10 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MealFragment extends Fragment implements MealView,OnmealClickListener{
-    @Override
-    public void onmealClick(ListsDetailsBy meal) {
+public class MealFragment extends Fragment implements MealView ,OnmealClickListener{
 
-    }
+
+
 
     private Context context;
     private MealAdapter mealAdapter;
@@ -78,9 +80,20 @@ public class MealFragment extends Fragment implements MealView,OnmealClickListen
         mealAdapter = new MealAdapter(requireActivity(),new ArrayList<>(),this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        mealPresenter = new MealPresenter(this, MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance()));/////add local later
+        mealPresenter = new MealPresenter(this, MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance(), MealLocalDataSourceImp.getInstance(this.getContext())));/////add local later
 
-        category = (CategoriesItem) getArguments().getSerializable("category");
+        Serializable retreveItem = getArguments().getSerializable("category");
+
+        if (retreveItem instanceof CategoriesItem) {
+             category = (CategoriesItem) retreveItem;
+            // Handle CategoriesItem type
+        }
+//        else if (retreveItem instanceof IngredientItem) {
+//            IngredientItem ingredient = (IngredientItem) retreveItem;
+//            // Handle IngredientItem type
+//        }
+
+      // category = (CategoriesItem) getArguments().getSerializable("category");
         Toast.makeText(requireActivity(), "strmeal"+category.getStrCategory(), Toast.LENGTH_SHORT).show();
 
 
@@ -112,4 +125,13 @@ public class MealFragment extends Fragment implements MealView,OnmealClickListen
     public void showCategoryErrorMessage(String error) {
 
     }
+
+    @Override
+    public void onmealClick(ListsDetailsBy meal)
+
+    { Bundle bundle = new Bundle();
+        bundle.putSerializable("categorydetails", (Serializable) meal);
+        Toast.makeText(requireActivity(), "categorydetails" + meal, Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_mealFragment_to_mealDetailsFragment, bundle);}
+
 }

@@ -24,6 +24,8 @@ import io.reactivex.rxjava3.core.Single;
 //
 //import java.util.List;
 /////////////////////// will edit for each class have presenter ////////////////////////////////
+////// will edit MealPresenter  implements CategoryDetailsCallback , ingredicallback , counyrtcallback
+
 public class MealPresenter implements CategoryDetailsCallback {
 
 
