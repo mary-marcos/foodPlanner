@@ -1,5 +1,9 @@
-package com.example.foodplanner.view.fav_meal;
+package com.example.foodplanner.view.calender;
 
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,22 +11,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.dto.MealItem;
+import com.example.foodplanner.model.dto.WeekPlan;
 import com.example.foodplanner.view.GlideImage;
+
 import java.util.List;
 
-public class favAdapter  extends RecyclerView.Adapter<favAdapter.ViewHolder> {
-    List<MealItem> mealsItems;
+
+
+
+
+
+
+
+public class WeekPlanMealAdapter extends RecyclerView.Adapter<WeekPlanMealAdapter.ViewHolder> {
+    List<WeekPlan> mealsItems;
     OnDeleteTextClickListener onDeleteTextClickListener;
-    OnItemClickListener onItemClickListener;
+   OnItemClickListener onItemClickListener;
 
 
-    public favAdapter(List<MealItem> mealsItems) {
+    public WeekPlanMealAdapter(List<WeekPlan> mealsItems) {
         this.mealsItems = mealsItems;
     }
+
+
 
     @NonNull
     @Override
@@ -34,8 +51,9 @@ public class favAdapter  extends RecyclerView.Adapter<favAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MealItem mealItem=mealsItems.get(position);
+        WeekPlan mealItem=mealsItems.get(position);
         holder.mealName.setText(mealItem.getStrMeal());
+        holder.datetv.setText(mealItem.getDate());
         GlideImage.downloadImageToImageView(holder.mealImg.getContext(),mealItem.getStrMealThumb(),holder.mealImg);
         holder.deleteTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,14 +75,14 @@ public class favAdapter  extends RecyclerView.Adapter<favAdapter.ViewHolder> {
         return mealsItems.size();
     }
 
-    public void changeData(List<MealItem> mealsItems){
+    public void changeData(List<WeekPlan> mealsItems){
         this.mealsItems=mealsItems;
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView mealImg;
-        TextView mealName,deleteTv;
+        TextView mealName,deleteTv,datetv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,15 +92,16 @@ public class favAdapter  extends RecyclerView.Adapter<favAdapter.ViewHolder> {
 
         private void initViews(View itemView) {
             mealImg=itemView.findViewById(R.id.meal_img);
+            datetv=itemView.findViewById(R.id.date);
             mealName=itemView.findViewById(R.id.meal_title_tv);
             deleteTv=itemView.findViewById(R.id.delete_tv);
         }
     }
 
     public interface OnDeleteTextClickListener{
-        void onDeleteClick(MealItem mealsItem);
+        void onDeleteClick(WeekPlan mealsItem);
     }
     public interface OnItemClickListener{
-        void onItemClick(MealItem mealsItem);
+        void onItemClick(WeekPlan mealsItem);
     }
 }

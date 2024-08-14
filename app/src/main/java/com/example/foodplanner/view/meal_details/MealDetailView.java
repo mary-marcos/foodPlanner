@@ -10,6 +10,9 @@ public interface MealDetailView {
     void onInsertFavSuccess();
     void onInsertFavError(String error);
 
+    void onInsertWeekplanSuccess();
+    void onInsertWeekplanError(String error);
+
     public void showItemDetailData(List<MealsDetail> mealsItem);
    // public void showItemDetailData(MealItem mealsItem);
    // public void addToFav(MealsItem mealsItem);

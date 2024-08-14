@@ -2,58 +2,46 @@ package com.example.foodplanner.view.fav_meal;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.api.MealRemoteDataSourceImpl;
+import com.example.foodplanner.db.MealLocalDataSourceImp;
+import com.example.foodplanner.model.dto.MealItem;
+import com.example.foodplanner.model.repo.MealRepositoryImpl;
+import com.example.foodplanner.presenter.FavMealPresenter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoriteMealsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FavoriteMealsFragment extends Fragment {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class FavoriteMealsFragment extends Fragment implements  FavoriteView{
+    FavMealPresenter favMealPresenter;
+    FavAdapter favAdapter;
+    RecyclerView recyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     public FavoriteMealsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteMealsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteMealsFragment newInstance(String param1, String param2) {
-        FavoriteMealsFragment fragment = new FavoriteMealsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -62,5 +50,71 @@ public class FavoriteMealsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorite_meals, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        favMealPresenter=new FavMealPresenter
+                (
+                        MealRepositoryImpl.getInstance
+                                (MealRemoteDataSourceImpl.getInstance(),
+                                        MealLocalDataSourceImp.getInstance(this.getContext())
+                                ),
+                        this
+                );
+        favMealPresenter.getMeals();
+        initViews(view);
+    }
+
+
+    private void initViews(View view) {
+        favAdapter=new FavAdapter(new ArrayList<>());
+        recyclerView=view.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(
+                this.requireContext(), RecyclerView.VERTICAL,false);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        favAdapter.onDeleteTextClickListener= this::deleteMealFromFav;
+       favAdapter.onItemClickListener=this::navtoDetailsFrag;
+        recyclerView.setAdapter(favAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+
+    private void deleteMealFromFav(MealItem mealsItem) {
+
+        favMealPresenter.deleteFavMeals(mealsItem);
+    }
+
+
+
+    private void navtoDetailsFrag(MealItem mealsItem) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("categorydetails", (Serializable) mealsItem);
+        Toast.makeText(requireActivity(), "favmeal" + mealsItem.getIdMeal(), Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_favoriteMealsFragment_to_mealDetailsFragment, bundle);
+}
+
+
+    @Override
+    public void onSuccessDeleteFromFav() {
+
+    }
+
+    @Override
+    public void onFailDeleteFromFav(String error) {
+
+    }
+
+    @Override
+    public void onGetAllFavoriteMealsError(String errorMessage) {
+        Toast.makeText(requireContext(),"cant load data"+errorMessage,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onGetAllFavoriteFireStoreMeals(List<MealItem> favoriteMeals) {
+        favAdapter.changeData(favoriteMeals);
     }
 }

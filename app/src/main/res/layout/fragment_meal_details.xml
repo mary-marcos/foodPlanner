@@ -25,56 +25,55 @@
             app:riv_oval="true" />
 
         <TextView
-            android:id="@+id/tvMealCategoryDetails"
+            android:id="@+id/tvMealCategDetail"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
 
+            android:layout_marginStart="28dp"
+            android:text="categ"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/tviewMealNameItem"
-            app:layout_constraintStart_toStartOf="@+id/tviewMealNameItem"
-            app:layout_constraintTop_toBottomOf="@+id/tviewMealNameItem" />
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
 
         <TextView
             android:id="@+id/tvMealCountryDetails"
 
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@id/bar2"
-            app:layout_constraintEnd_toEndOf="@+id/tvMealCategoryDetails"
-            app:layout_constraintStart_toStartOf="@+id/tvMealCategoryDetails"
-            app:layout_constraintTop_toBottomOf="@+id/tvMealCategoryDetails" />
+            android:text="country"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/tvMealCategDetail"
+            app:layout_constraintStart_toStartOf="@+id/tvMealCategDetail"
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/CalendarItemImage"
             android:layout_width="72dp"
             android:layout_height="38dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="72dp"
             android:src="@drawable/calendar_month"
-            app:tint="@color/biege"
-            app:layout_constraintBottom_toBottomOf="@+id/tvMealCountryDetails"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvMealCategoryDetails"
-            app:layout_constraintTop_toTopOf="@+id/tvMealCategoryDetails" />
+            app:layout_constraintTop_toBottomOf="@+id/tviewMealNameItem"
+            app:tint="@color/biege" />
 
         <ImageView
             android:id="@+id/FavItemImage"
             android:layout_width="36dp"
             android:layout_height="40dp"
+            android:layout_marginStart="72dp"
             android:src="@drawable/favorite"
-            app:tint="@color/red"
             app:layout_constraintBottom_toBottomOf="@+id/CalendarItemImage"
-            app:layout_constraintEnd_toStartOf="@+id/tvMealCategoryDetails"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/CalendarItemImage" />
+            app:layout_constraintTop_toTopOf="@+id/CalendarItemImage"
+            app:tint="@color/red" />
 
         <TextView
             android:id="@+id/tviewMealNameItem"
@@ -83,7 +82,7 @@
             android:layout_marginTop="8dp"
 
             android:gravity="center"
-            android:textColor="@color/blue"
+            android:textColor="@color/red"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/gline2"
@@ -110,34 +109,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="8dp"
+
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="tviewMealNameItem,FavItemImage,CalendarItemImage,tvMealCountryDetails,tvMealCategoryDetails" />
+            app:constraint_referenced_ids="tviewMealNameItem,FavItemImage,CalendarItemImage,tvMealCountryDetails" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rviewIngredients"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/gline2"
-            app:layout_constraintStart_toStartOf="@+id/gline"
-            app:layout_constraintTop_toBottomOf="@+id/tvIngriden"
+            android:id="@+id/viewIngredients"
+            android:layout_width="301dp"
+            android:layout_height="109dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="1dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.357"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMealCountryDetails"
             tools:itemCount="10"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
             tools:orientation="horizontal" />
 
         <TextView
             android:id="@+id/textView25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="4dp"
 
-            android:text="PROCEDURES"
+            android:layout_marginTop="32dp"
+            android:text="Steps"
             android:textColor="@color/biege"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/gline"
-            app:layout_constraintTop_toBottomOf="@+id/rviewIngredients" />
+            app:layout_constraintTop_toBottomOf="@+id/ytPlayerVideo" />
 
         <TextView
             android:id="@+id/tvProcedure"
@@ -153,29 +156,52 @@
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
             android:id="@+id/ytPlayerVideo"
-            android:layout_width="328dp"
-            android:layout_height="202dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="308dp"
+            android:layout_height="199dp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="36dp"
             app:layout_constraintEnd_toStartOf="@+id/gline2"
+            app:layout_constraintHorizontal_bias="0.468"
             app:layout_constraintStart_toStartOf="@+id/gline"
-            app:layout_constraintTop_toBottomOf="@id/tvProcedure"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/viewIngredients" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="32dp" />
+            app:layout_constraintGuide_begin="36dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="371dp" />
+            app:layout_constraintGuide_end="36dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="category"
+            android:textColor="@color/biege"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/gline"
+            app:layout_constraintTop_toBottomOf="@+id/FavItemImage" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="country"
+            android:textColor="@color/biege"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/gline"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

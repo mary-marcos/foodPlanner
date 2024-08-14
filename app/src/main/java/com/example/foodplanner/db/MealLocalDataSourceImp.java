@@ -2,8 +2,10 @@ package com.example.foodplanner.db;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.foodplanner.model.dto.MealItem;
+import com.example.foodplanner.model.dto.WeekPlan;
 
 
 import java.util.List;
@@ -55,5 +57,56 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
+
+
+
+//////////////
+
+
+       public Flowable<List<WeekPlan>> getallweekplan()
+       {
+           return mealDao.getWeekPlanMeals();
+       }
+
+
+
+
+       public Flowable<List<WeekPlan>> getallmealbydate(String date)
+       {
+           return mealDao.getMealsForDate(date);
+       }
+
+       public Completable deleteweakplanmeal(WeekPlan weekPlan){
+           return mealDao.deleteWeekPlanMealFromCalender(weekPlan)
+                  .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread());
+       }
+
+
+
+       public Completable insertProductToweekplan(WeekPlan weekPlan){
+           //mealItem.setFavorite(true);
+           return mealDao.insertWeekPlanMealToCalender(weekPlan)
+
+                   .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread());
+       }
+
+       ////////////
+
+public void deleteAllTheCalenderList() {
+    new Thread(() -> {
+        mealDao.deleteAllTheCalenderList();
+        Log.i("TAG", "Deleting all meals from the calendar list");
+    }).start();
+}
+
+
+       public void deleteAllTheFavoriteList() {
+           new Thread(() -> {
+               mealDao.deleteAllTheFavoriteList();
+               Log.i("TAG", "Deleting all meals from the favorite list");
+           }).start();
+       }
 
     }

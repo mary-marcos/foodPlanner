@@ -4,6 +4,7 @@ import com.example.foodplanner.api.MealDetailsCallback;
 import com.example.foodplanner.model.dto.MealItem;
 import com.example.foodplanner.model.dto.MealsDetail;
 import com.example.foodplanner.model.dto.MealsDetailResponse;
+import com.example.foodplanner.model.dto.WeekPlan;
 import com.example.foodplanner.model.repo.MealRepositoryView;
 import com.example.foodplanner.view.meal_details.MealDetailView;
 
@@ -35,6 +36,19 @@ public class MealDetailsPresenter implements  MealDetailsCallback {
                 .subscribe(
                         () -> mealDetailView.onInsertFavSuccess(),
                         error -> mealDetailView.onInsertFavError(error.getLocalizedMessage()));
+
+    }
+
+
+    public void addToWeekplan(WeekPlan weekplan) {
+        //  this.mealsDetail = mealsDetail;
+        mealRepositoryView.insertweekplanMeal(weekplan)
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> mealDetailView.onInsertWeekplanSuccess(),
+                        error -> mealDetailView.onInsertWeekplanError(error.getLocalizedMessage()));
 
     }
     @Override

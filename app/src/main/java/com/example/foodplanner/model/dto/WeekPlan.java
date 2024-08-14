@@ -2,19 +2,20 @@ package com.example.foodplanner.model.dto;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-@Entity(tableName = "mealItemDetail")
-public class MealItem implements Serializable {
+
+
+@Entity(tableName = "weekplan")
+public class WeekPlan implements Serializable {
 
 
     @PrimaryKey
     @NonNull
-   // @SerializedName("idMeal")
+    // @SerializedName("idMeal")
     private String idMeal;
 
     @SerializedName("strMeal")
@@ -22,7 +23,10 @@ public class MealItem implements Serializable {
 
     private String  strMealThumb;
 
-    private boolean isFavorite;
+
+
+    @SerializedName("date")
+    public String date;
 
 
 
@@ -34,6 +38,9 @@ public class MealItem implements Serializable {
 
 
 
+    public String getDate() {
+        return date;
+    }
     public String getIdMeal(){
         return idMeal;
     }
@@ -42,9 +49,7 @@ public class MealItem implements Serializable {
     public String getStrMeal(){
         return strMeal;
     }
-    public boolean isFavorite() {
-        return isFavorite;
-    }
+
 
 
 
@@ -72,10 +77,10 @@ public class MealItem implements Serializable {
         this.strMealThumb = strMealThumb;
     }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
 
 
 }

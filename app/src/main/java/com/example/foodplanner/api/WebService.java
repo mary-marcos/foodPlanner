@@ -1,8 +1,11 @@
 package com.example.foodplanner.api;
 
+import com.example.foodplanner.model.dto.AreaItemResponse;
 import com.example.foodplanner.model.dto.CategoryResponse;
+import com.example.foodplanner.model.dto.IngredientsItemResponse;
 import com.example.foodplanner.model.dto.ListsDetailsbyResponse;
 import com.example.foodplanner.model.dto.MealsDetailResponse;
+
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -20,7 +23,21 @@ public interface WebService {
     @GET("filter.php")
     public Single<ListsDetailsbyResponse> getMealsByCategory(@Query("c") String category);
 
+    @GET("list.php?a=list")
+    public Call<AreaItemResponse>getAreas();
+//    @GET("list.php?a=list")
+//    public Single<AreaItemResponse>getAreas();
+
+    @GET("list.php?i=list")
+    public Single<IngredientsItemResponse>getIngredients();
+
     @GET("lookup.php")
     public Single<MealsDetailResponse> getMealById(@Query("i") String id);
+
+    @GET("search.php")
+    public Single<MealsDetailResponse>searchByName(@Query("s") String mealName);
+
+    @GET("random.php")
+    public Single<MealsDetailResponse> getRandomMeal();
 
 }

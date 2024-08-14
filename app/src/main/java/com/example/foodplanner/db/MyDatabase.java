@@ -8,11 +8,11 @@ import androidx.room.RoomDatabase;
 
 import com.example.foodplanner.model.dto.MealItem;
 import com.example.foodplanner.model.dto.MealsDetail;
-
+import com.example.foodplanner.model.dto.WeekPlan;
 
 
 @Database
-        (entities = {MealItem.class},version = 1,exportSchema = false)
+        (entities = {MealItem.class, WeekPlan.class},version = 2,exportSchema = false)
 
 
 public abstract class MyDatabase extends RoomDatabase {

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -34,6 +35,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.firebase.auth
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -70,4 +72,14 @@ dependencies {
 
 // youtubeplayer
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+
+// firebase
+    implementation ("com.google.firebase:firebase-bom:31.0.1")
+    implementation ("com.google.firebase:firebase-auth")
+    implementation ("com.google.android.gms:play-services-auth:20.2.0")
+
+
+    //binding
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0'
 }

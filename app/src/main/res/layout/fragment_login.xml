@@ -63,10 +63,12 @@
                 >
 
                 <EditText
-                    android:id="@+id/email_et"
+
+                    android:id="@+id/email_login"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:hint="email" />
+
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pass_input_layout"
@@ -78,7 +80,8 @@
                 >
 
                 <EditText
-                    android:id="@+id/pass_et"
+
+                    android:id="@+id/pass_login"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:hint="password"
@@ -97,31 +100,32 @@
                 app:boxStrokeColor="@color/orange" />
 
             <TextView
-                android:id="@+id/have_account_tv"
+
+                android:id="@+id/dohaveacc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="you_don_t_have_an_account_signup"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/blue"
                 android:layout_marginBottom="10dp"
-                />
+                android:gravity="center_horizontal"
+                android:text="you dont have an account"
+                android:textColor="@color/blue" />
+
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/dont_have_acc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:strokeWidth="2dp"
-                app:strokeColor="@color/orange"
                 android:layout_marginTop="8dp"
+                app:strokeColor="@color/orange"
 
-                >
+                app:strokeWidth="2dp">
+
                 <ImageView
                     android:id="@+id/google_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/splashscreen"
                     android:layout_margin="5dp"
-                    />
+                    android:src="@drawable/splashscreen" />
 
             </com.google.android.material.card.MaterialCardView>
             <TextView

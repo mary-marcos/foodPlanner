@@ -1,6 +1,8 @@
 package com.example.foodplanner.view.meal_details;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,23 +25,24 @@ import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.api.MealRemoteDataSourceImpl;
 import com.example.foodplanner.db.MealLocalDataSourceImp;
-import com.example.foodplanner.model.dto.CategoriesItem;
 import com.example.foodplanner.model.dto.ListIngredientMeasure;
 import com.example.foodplanner.model.dto.ListsDetailsBy;
 import com.example.foodplanner.model.dto.MealItem;
 import com.example.foodplanner.model.dto.MealsDetail;
 import com.example.foodplanner.model.dto.MealsDetailResponse;
+import com.example.foodplanner.model.dto.WeekPlan;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.model.repo.MealRepositoryView;
 import com.example.foodplanner.presenter.MealDetailsPresenter;
-import com.example.foodplanner.presenter.MealPresenter;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
@@ -54,13 +58,15 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
     private TextView tvItemCategory;
     private TextView tvProcedures;
     private ImageView addToFavImage;
+    private ImageView addTocalenderImage;
     private MealDetailsPresenter mealdetailsPresenter ;
     private ListsDetailsBy retreved_DetailsBy;
     private ListsDetailsBy listAreaDetails;
     private ListsDetailsBy listingredientDetails;
     private MealItem searchByName;
     private MealItem favMeal;
-   // private WeekPlan weekPlanMeal;
+    private WeekPlan weekPlanMeal;
+
     private Context context;
     private IngredientAdapter ingrAdapter;
     private RecyclerView recyclerView;
@@ -72,6 +78,10 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
     private YouTubePlayerView youTubePlayerView;
     private MealRepositoryView mealRepositoryView;
     MealsDetail target_mealsDetail;
+    String mymealId="53043";
+    MealItem retrevefavmeal;
+    WeekPlan retrevedPlan;
+    MealsDetail retrevedRandom;
 
 
     public MealDetailsFragment() {
@@ -100,12 +110,13 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
         super.onViewCreated(view, savedInstanceState);
         tvItemName = view.findViewById(R.id.tviewMealNameItem);
         tvItemCountry = view.findViewById(R.id.tvMealCountryDetails);
-        tvItemCategory = view.findViewById(R.id.tvMealCategoryDetails);
+        tvItemCategory = view.findViewById(R.id.tvMealCategDetail);
         tvProcedures = view.findViewById(R.id.tvProcedure);
         itemImage = view.findViewById(R.id.mealDetailImage);
         addToFavImage = view.findViewById(R.id.FavItemImage);
+        addTocalenderImage=view.findViewById(R.id.CalendarItemImage);
         youTubePlayerView = view.findViewById(R.id.ytPlayerVideo);
-        recyclerView = view.findViewById(R.id.rviewIngredients);
+        recyclerView = view.findViewById(R.id.viewIngredients);
 
         linearLayoutManager = new LinearLayoutManager(requireContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -128,37 +139,37 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
 
         if (retreveItem instanceof ListsDetailsBy) {
             retreved_DetailsBy = (ListsDetailsBy)  retreveItem;
-            // Handle CategoriesItem type
+            mymealId=retreved_DetailsBy.getIdMeal();
+            getmeal(mymealId);
         }
-//        else if (retreveItem instanceof IngredientItem) {
-//            IngredientItem ingredient = (IngredientItem) retreveItem;
-//            // Handle IngredientItem type
-//        }
+        else if (retreveItem instanceof MealsDetail) {
+            retrevedRandom  = (MealsDetail) retreveItem;
+           Toast.makeText(requireActivity(),"meal name :"+  retrevedRandom.getIdMeal(), Toast.LENGTH_SHORT).show();
+         setdta(retrevedRandom);
+          //  mymealId=retrevedRandom.getIdMeal();
+          //  getmeal(mymealId);
+        }
+        else if (retreveItem instanceof MealItem) {
+            retrevefavmeal  = (MealItem) retreveItem;
+            Toast.makeText(requireActivity(),
+                    "meal name :"+
+                            retrevefavmeal.getIdMeal(), Toast.LENGTH_SHORT).show();
+
+            mymealId=retrevefavmeal.getIdMeal();
+            getmeal(mymealId);
+        }
+        else if (retreveItem instanceof WeekPlan) {
+            retrevedPlan  = (WeekPlan) retreveItem;
+            Toast.makeText(requireActivity(),
+                    "meal name :"+
+                            retrevedPlan.getIdMeal(), Toast.LENGTH_SHORT).show();
+
+            mymealId=retrevedPlan.getIdMeal();
+            getmeal(mymealId);
+        }
 
 //    pass the id of meal to get meal details  it retreve  a list have one item
-        Single<MealsDetailResponse> mealsDetailSingle =mealdetailsPresenter.getMealDetail(retreved_DetailsBy.getIdMeal());
-        mealsDetailSingle
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        mealsDetailResponse ->
-                        {
-                     target_mealsDetail = mealsDetailResponse.getMeals().get(0);
 
-                            Log.i("TAG", "mealsDetailResponse.getMeals().get(0)=" + target_mealsDetail);
-
-                             setdta(target_mealsDetail);
-
-                          }
-                        ,throwable ->
-                        {Log.e("TAG", "Error fetching meal details: " + throwable.getMessage());
-                            Toast.makeText(requireContext(), "Error fetching meal details", Toast.LENGTH_SHORT).show();
-                        }
-
-
-
-
-                ) ;
 
 
 
@@ -170,6 +181,34 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
 //            }
 //        });
     }
+
+
+   void getmeal(String id){
+
+       Single<MealsDetailResponse> mealsDetailSingle =mealdetailsPresenter.getMealDetail(id);
+       mealsDetailSingle
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(
+                       mealsDetailResponse ->
+                       {
+                           target_mealsDetail = mealsDetailResponse.getMeals().get(0);
+
+                           Log.i("TAG", "mealsDetailResponse.getMeals().get(0)=" + target_mealsDetail);
+
+                           setdta(target_mealsDetail);
+
+                       }
+                       ,throwable ->
+                       {Log.e("TAG", "Error fetching meal details: " + throwable.getMessage());
+                           Toast.makeText(requireContext(), "Error fetching meal details", Toast.LENGTH_SHORT).show();
+                       }
+
+
+
+
+               ) ;
+   }
 
     private void loadVideo(@NonNull YouTubePlayer youTubePlayer, String youtubeVideoId) {
         youTubePlayer.loadVideo(getVideoId(youtubeVideoId), 0);
@@ -206,7 +245,13 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
         });
 
 
+        addTocalenderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDatatoplan(target_mealsDetail);
 
+            }
+        });
 
 
         String youtubeURL=target_mealsDetail.getStrYoutube();
@@ -224,6 +269,42 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
         }else{ youTubePlayerView.setVisibility(View.GONE);}
     }
 
+void  setDatatoplan(MealsDetail currentmeal){
+      Calendar calendar = Calendar.getInstance();
+      int year = calendar.get(Calendar.YEAR);
+      int month = calendar.get(Calendar.MONTH);
+      int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+      DatePickerDialog datePickerDialog = new
+              DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+
+          @Override
+          public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+              String date = getDateString(year,month,dayOfMonth);
+              WeekPlan weekPlan = new WeekPlan();
+
+              weekPlan.setDate(date);
+              weekPlan.setIdMeal(currentmeal.getIdMeal());
+              weekPlan.setStrMeal(currentmeal.getStrMeal());
+              weekPlan.setStrMealThumb(currentmeal.getStrMealThumb());
+
+              mealdetailsPresenter.addToWeekplan(weekPlan);
+
+          }
+      }, year, month, dayOfMonth);
+      datePickerDialog.show();
+
+
+
+  }
+
+    public static String getDateString(int year, int month, int dayOfMonth){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year,month,dayOfMonth);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        return  format.format(calendar.getTime());
+    }
 
    MealItem setDatatofav(MealsDetail currentmeal){
         MealItem mealtofav=new MealItem();
@@ -252,6 +333,20 @@ public class MealDetailsFragment extends Fragment implements  MealDetailView{
         Toast.makeText(requireActivity(), " cant add Meal to favorite "+error, Toast.LENGTH_SHORT).show();
 
    System.out.println(" cant add Meal to favorite "+error);
+    }
+
+    @Override
+    public void onInsertWeekplanSuccess() {
+        if (isAdded()) {
+            //AlertMessage.showToastMessage("Meal added to favorite", requireContext());
+            Toast.makeText(requireActivity(), "Meal added weekplan", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    @Override
+    public void onInsertWeekplanError(String error) {
+        Toast.makeText(requireActivity(), " cant add Meal toweekplan "+error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
