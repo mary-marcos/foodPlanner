@@ -1,6 +1,8 @@
 package com.example.foodplanner.view.meal_by_category;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,11 +23,13 @@ import android.widget.Toast;
 import com.example.foodplanner.R;
 import com.example.foodplanner.api.MealRemoteDataSourceImpl;
 import com.example.foodplanner.db.MealLocalDataSourceImp;
+import com.example.foodplanner.model.dto.AreaItem;
 import com.example.foodplanner.model.dto.CategoriesItem;
 import com.example.foodplanner.model.dto.ListsDetailsBy;
 import com.example.foodplanner.model.dto.ListsDetailsbyResponse;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.MealPresenter;
+import com.example.foodplanner.view.search_meal.SearchMealFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ public class MealFragment extends Fragment implements MealView ,OnmealClickListe
     private LinearLayoutManager linearLayoutManager;
     CardView randomCardView;
     CategoriesItem category;
+    String message;
 
 
     public MealFragment() {
@@ -86,34 +91,54 @@ public class MealFragment extends Fragment implements MealView ,OnmealClickListe
 
         if (retreveItem instanceof CategoriesItem) {
              category = (CategoriesItem) retreveItem;
+             message=category.getStrCategory();
             // Handle CategoriesItem type
         }
-//        else if (retreveItem instanceof IngredientItem) {
-//            IngredientItem ingredient = (IngredientItem) retreveItem;
-//            // Handle IngredientItem type
-//        }
-
-      // category = (CategoriesItem) getArguments().getSerializable("category");
-        Toast.makeText(requireActivity(), "strmeal"+category.getStrCategory(), Toast.LENGTH_SHORT).show();
-
-
-        if (category != null) {
-            categoryDetailsList =
-                    mealPresenter.getmealsinCategoryDetail(category.getStrCategory());
-            Log.i("TAG", "s()categoryDetailsList " +categoryDetailsList);
-            categoryDetailsList.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(item -> {
-                                mealAdapter.changeData(item.getListDetails());
-
-                                recyclerView.setAdapter(mealAdapter);
-                            },
-                            throwable -> {
-                                Log.i("TAG", "showCategoryDetail: unable to show products because: " + throwable.getMessage());
-                            });
+        else if (retreveItem instanceof AreaItem) {
+            AreaItem area = (AreaItem) retreveItem;
+            message=area.getStrArea();
         }
 
+      // category = (CategoriesItem) getArguments().getSerializable("category");
+      //  Toast.makeText(requireActivity(), "strmeal"+category.getStrCategory(), Toast.LENGTH_SHORT).show();
 
+
+        if (category != null&& isNetworkAvailable()) {
+            categoryDetailsList =
+                    mealPresenter.getmealsinCategoryDetail(message);
+            getdata();
+        }
+        else if (isNetworkAvailable())
+        {categoryDetailsList= mealPresenter.getAreaDetail(message);
+            getdata();
+        }else{ Toast.makeText(MealFragment.this.getContext(), "Check Your Internet", Toast.LENGTH_SHORT).show();}
+
+
+
+
+
+    }
+
+   void getdata(){
+       Log.i("TAG", "s()categoryDetailsList " +categoryDetailsList);
+       categoryDetailsList.subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(item -> {
+                           mealAdapter.changeData(item.getListDetails());
+
+                           recyclerView.setAdapter(mealAdapter);
+                       },
+                       throwable -> {
+                           Log.i("TAG", "showCategoryDetail: unable to show products because: " + throwable.getMessage());
+                       });
+   }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnected();
+        }
+        return false;
     }
 
     @Override
@@ -131,7 +156,7 @@ public class MealFragment extends Fragment implements MealView ,OnmealClickListe
 
     { Bundle bundle = new Bundle();
         bundle.putSerializable("categorydetails", (Serializable) meal);
-        Toast.makeText(requireActivity(), "categorydetails" + meal, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(requireActivity(), "categorydetails" + meal, Toast.LENGTH_SHORT).show();
         Navigation.findNavController(requireView()).navigate(R.id.action_mealFragment_to_mealDetailsFragment, bundle);}
 
 }

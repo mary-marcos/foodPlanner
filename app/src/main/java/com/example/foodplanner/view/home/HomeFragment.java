@@ -29,8 +29,10 @@ import com.example.foodplanner.model.dto.MealsDetail;
 import com.example.foodplanner.model.dto.MealsDetailResponse;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.HomePresenter;
+import com.example.foodplanner.view.SplashScreenFragment;
 import com.example.foodplanner.view.activity.HomeActivity;
 import com.example.foodplanner.view.activity.MainActivity;
+import com.example.foodplanner.view.auth.login.LoginFragment;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +57,7 @@ Button logout;
       RecyclerView categoryRecyclerView, ingredRecyclerView,countryRecyclerView;
     MealsDetail target_mealsDetail;
 
+
     private  LinearLayoutManager linearLayoutManager;
    ProgressBar ingredientProgressBar;
    // CountryAdapter countryAdapter;
@@ -73,6 +76,9 @@ Button logout;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
     }
 
     @Override
@@ -86,17 +92,25 @@ Button logout;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//
+
         logout=view.findViewById(R.id.logout);
+        if (LoginFragment.isguest == true)
+        {logout.setVisibility(View.INVISIBLE);
+        } else {
+            logout.setVisibility(View.VISIBLE);  // The button is visible
+        }
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                clearLocalFavoriteData();
+                clearLocalCalendarData();
                 gomainActivity();
             }
         });
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
-homePresenter=new HomePresenter(this,MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance(), MealLocalDataSourceImp.getInstance(this.getContext()) ));
+homePresenter=new HomePresenter
+        (this,MealRepositoryImpl.getInstance(MealRemoteDataSourceImpl.getInstance(), MealLocalDataSourceImp.getInstance(this.getContext()) ));
 
        mealImg=view.findViewById(R.id.meal_img);
        mealTitle=view.findViewById(R.id.meal_title_tv);
@@ -111,6 +125,13 @@ homePresenter=new HomePresenter(this,MealRepositoryImpl.getInstance(MealRemoteDa
 
 
     }
+    private void clearLocalFavoriteData() {
+        homePresenter.deleteAllTheFavoritemealList();
+    }
+
+    private void clearLocalCalendarData() {
+        homePresenter.deleteAllTheCalendermealList();
+    }
 
 
   void  onrandomclicked(MealsDetail target){
@@ -119,7 +140,7 @@ homePresenter=new HomePresenter(this,MealRepositoryImpl.getInstance(MealRemoteDa
                                      public void onClick(View view) {
                                          Bundle bundle = new Bundle();
                                          bundle.putSerializable("categorydetails", (Serializable) target);
-                                         Toast.makeText(requireActivity(), "categorydetails" + target.getStrMeal(), Toast.LENGTH_SHORT).show();
+                                       //  Toast.makeText(requireActivity(), "categorydetails" + target.getStrMeal(), Toast.LENGTH_SHORT).show();
                                          Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_mealDetailsFragment, bundle);}
 
 
@@ -190,7 +211,7 @@ void setRandom(){
              public void onCategoryClick(CategoriesItem category) {
                Bundle bundle = new Bundle();
               bundle.putSerializable("category", (Serializable) category);
-                Toast.makeText(requireActivity(), "category" + category, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(requireActivity(), "category" + category, Toast.LENGTH_SHORT).show();
          Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_mealFragment, bundle);
       }
 

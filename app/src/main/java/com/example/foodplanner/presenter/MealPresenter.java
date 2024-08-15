@@ -40,6 +40,9 @@ public class MealPresenter implements CategoryDetailsCallback {
     public Single<ListsDetailsbyResponse> getmealsinCategoryDetail(String category) {
         return mealRepositoryView.CategoryDetailsNetworkCall(category);
     }
+    public Single<ListsDetailsbyResponse> getAreaDetail(String category) {
+        return mealRepositoryView.AreaDetailsNetworkCall(category);
+    }
 
     @Override
     public void onSuccessResult(List<ListsDetailsBy> categoryDetailsList) {

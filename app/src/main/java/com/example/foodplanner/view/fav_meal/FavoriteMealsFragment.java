@@ -20,6 +20,7 @@ import com.example.foodplanner.db.MealLocalDataSourceImp;
 import com.example.foodplanner.model.dto.MealItem;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.FavMealPresenter;
+import com.example.foodplanner.view.auth.login.LoginFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -63,8 +64,13 @@ public class FavoriteMealsFragment extends Fragment implements  FavoriteView{
                                 ),
                         this
                 );
-        favMealPresenter.getMeals();
-        initViews(view);
+
+        if(LoginFragment.isguest){
+            Toast.makeText(FavoriteMealsFragment.this.getContext(), "you are a guest", Toast.LENGTH_SHORT).show();
+        }else{favMealPresenter.getMeals();
+            initViews(view);}
+
+
     }
 
 

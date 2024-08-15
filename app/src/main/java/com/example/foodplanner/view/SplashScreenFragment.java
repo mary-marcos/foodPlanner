@@ -17,9 +17,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 
+import com.example.foodplanner.view.activity.HomeActivity;
 import com.example.foodplanner.view.auth.login.LoginFragment;
 import com.google.android.material.card.MaterialCardView;
 import com.example.foodplanner.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 //import com.example.foodplanner.Constants;
 //
@@ -31,8 +34,10 @@ import com.example.foodplanner.R;
 //import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreenFragment extends Fragment {
-//    FirebaseAuth auth = FirebaseAuth.getInstance();
+//  FirebaseAuth auth = FirebaseAuth.getInstance();
 //    FirebaseUser user = auth.getCurrentUser();
+FirebaseAuth mAuth;
+public static boolean isGuest;
 
 
     public SplashScreenFragment() {
@@ -101,23 +106,20 @@ public class SplashScreenFragment extends Fragment {
     }
 
     private void checkUserAuthentication() {
-//        if (isAdded() && getContext() != null) {
-//            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//            if (currentUser != null) {
-//                Intent intent = new Intent(getContext(), HomeActivity.class);
-//                startActivity(intent);
-//            } else {
-
-
+        if (isAdded() && getContext() != null) {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                Intent intent = new Intent(getContext(), HomeActivity.class);
+                isGuest=true;
+                startActivity(intent);
                 navigateLoginFragment();
+            } else {
+                isGuest=false;
 
+      navigateLoginFragment();}
 
+            }
 
-//            }
-//        } else {
-//            // Handle the case where the fragment is not attached or the context is null
-//            Log.e("TAG", "Fragment not attached or context is null in checkUserAuthentication");
-//        }
 
 
     }

@@ -35,4 +35,15 @@ public class HomePresenter implements CategoryCallback {
     public Single<MealsDetailResponse> getRandomMeal() {
         return repositoryView.getRandomNetworkCall();
     }
+
+
+
+    public void deleteAllTheCalendermealList() {
+        repositoryView.deleteAllTheCalenderList();
+    }
+
+
+    public void deleteAllTheFavoritemealList() {
+        repositoryView.deleteAllTheFavoriteList();
+    }
 }

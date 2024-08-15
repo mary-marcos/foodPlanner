@@ -22,6 +22,8 @@ public interface WebService {
 
     @GET("filter.php")
     public Single<ListsDetailsbyResponse> getMealsByCategory(@Query("c") String category);
+    @GET("filter.php")
+    public Single<ListsDetailsbyResponse> getMealsByArea(@Query("a") String category);
 
     @GET("list.php?a=list")
     public Call<AreaItemResponse>getAreas();

@@ -4,86 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/chef_ic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent=".4"
-        app:layout_constraintHeight_percent=".29"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="144dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="124dp"
         android:src="@drawable/splashscreen"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".29"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".4" />
+
     <TextView
         android:id="@+id/register_tv"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/chef_ic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
         android:text="login"
-        style="@style/TitleText"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chef_ic" />
+
     <com.google.android.material.internal.BaselineLayout
         android:id="@+id/baseline2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/register_tv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="405dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintHeight_percent=".04"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_tv" />
+
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/baseline2"
-        app:layout_constraintHeight_percent=".6"
-        android:layout_marginBottom="10dp"
-        android:paddingHorizontal="20dp"
-        android:orientation="vertical"
-        android:background="@drawable/border_bg"
+        android:layout_width="312dp"
+        android:layout_height="433dp"
         android:layout_marginHorizontal="20dp"
+        android:background="@drawable/border_bg"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".6"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/baseline2"
+        app:layout_constraintVertical_bias="0.0">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
 
             >
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:boxStrokeColor="@color/orange"
-                >
+                app:boxStrokeColor="@color/orange">
 
                 <EditText
 
                     android:id="@+id/email_login"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="60dp"
                     android:hint="email" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pass_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:boxStrokeColor="@color/orange"
-                >
+                app:boxStrokeColor="@color/orange">
 
                 <EditText
 
                     android:id="@+id/pass_login"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="60dp"
                     android:hint="password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -128,17 +138,17 @@
                     android:src="@drawable/splashscreen" />
 
             </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:id="@+id/guest_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="as_a_guest"
                 android:layout_gravity="center"
-                android:textStyle="italic"
-                android:textSize="20sp"
-                android:textColor="@color/orange"
                 android:layout_marginTop="5dp"
-                />
+                android:text="as a guest"
+                android:textColor="@color/orange"
+                android:textSize="20sp"
+                android:textStyle="italic" />
 
         </LinearLayout>
     </ScrollView>

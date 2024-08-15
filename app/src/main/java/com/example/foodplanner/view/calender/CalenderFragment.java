@@ -24,6 +24,7 @@ import com.example.foodplanner.model.dto.MealItem;
 import com.example.foodplanner.model.dto.WeekPlan;
 import com.example.foodplanner.model.repo.MealRepositoryImpl;
 import com.example.foodplanner.presenter.CalenderPresenter;
+import com.example.foodplanner.view.auth.login.LoginFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -145,6 +146,12 @@ public class CalenderFragment extends Fragment implements CalendersView {
 
     @Override
     public void onGetAllplanBydateMeals(List<WeekPlan> plannedMeals) {
-        calenderAdapter.changeData(plannedMeals);
+        if(LoginFragment.isguest){
+            Toast.makeText(CalenderFragment.this.getContext(), "is guest true", Toast.LENGTH_SHORT).show();
+        }
+        if(LoginFragment.isguest==false){
+            calenderAdapter.changeData(plannedMeals);
+        }
+
     }
 }

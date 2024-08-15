@@ -75,12 +75,12 @@ public class MealRemoteDataSourceImpl //implements MealRemoteDataSource
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-//public  Single<AreaItemResponse> AreaNetworkCall(){
-//         return mealService.getAreas()
-//             .subscribeOn(Schedulers.io())
-//             .observeOn(AndroidSchedulers.mainThread());
-//}
 
+    public Single<ListsDetailsbyResponse> AreaDetailsNetworkCall(String category) {
+        return mealService.getMealsByArea(category)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 
     public void AreasNetworkCall(AreaCallback areaMealCallback) {

@@ -33,7 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFragment extends Fragment
         //implements LoginView
 {
-
+public static boolean isguest = false;
     Button signInBtn;
     EditText ediemail, edipassword;
     ImageView googleImg;
@@ -71,8 +71,14 @@ public class LoginFragment extends Fragment
         ediemail= view.findViewById(R.id.email_login);
         edipassword=view.findViewById(R.id.pass_login);
         haveAccountText=view.findViewById(R.id.dohaveacc);
+        guestTv=view.findViewById(R.id.guest_tv);
 
-
+        guestTv.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startHomeActivityasguest();
+            }
+        });
         haveAccountText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +109,7 @@ public class LoginFragment extends Fragment
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(LoginFragment.this.getContext(), "done.",
                                         Toast.LENGTH_SHORT).show();
+                                isguest=false;
                                 startHomeActivity();
                                 //  FirebaseUser user = mAuth.getCurrentUser();
                                 // updateUI(user);
@@ -125,12 +132,21 @@ public class LoginFragment extends Fragment
 
     private void startHomeActivity() {
         Intent intent = new Intent(this.getContext(), HomeActivity.class);
+
+        startActivity(intent);
+    }
+    private void startHomeActivityasguest() {
+        isguest=true;
+        Intent intent = new Intent(this.getContext(), HomeActivity.class);
+        intent.putExtra("guestMode", true);
         startActivity(intent);
     }
 
     private void navigateToLoginFragment() {
         FragmentNavigator.addFragment(new RegisterFreagment(),this.requireActivity(),R.id.fragment_container);
     }
+
+
 
 
 

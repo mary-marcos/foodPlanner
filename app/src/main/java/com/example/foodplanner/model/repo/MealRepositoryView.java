@@ -27,6 +27,7 @@ public interface MealRepositoryView {
     Single<MealsDetailResponse> getRandomNetworkCall();
     public void AreasNetworkCall(AreaCallback areaMealCallback);
     //Single<AreaItemResponse> getAreaNetworkCall();
+    public Single<ListsDetailsbyResponse> AreaDetailsNetworkCall(String category);
     @NonNull Single<IngredientsItemResponse> getingredientworkCall();
 
 
@@ -42,4 +43,16 @@ public interface MealRepositoryView {
     Flowable<List<WeekPlan>> getmealbydate(String date);
     Completable insertweekplanMeal(WeekPlan weekPlanitem);
     Completable deleteFromweekplan(WeekPlan weekPlanitem);
+
+    public void deleteAllTheCalenderList();
+    public void deleteAllTheFavoriteList();
+
+
+    //
+    //remote DB
+    void insertMealRemoteToFavorite(MealItem mealsItem);
+    void insertMealRemoteToWeekPlan(WeekPlan weekPlan);
+    void deleteMealRemoteFromFavorite(MealItem mealsItem);
+    void deleteMealRemoteFromWeekPlan(WeekPlan weekPlan);
+
 }

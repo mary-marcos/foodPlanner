@@ -1,5 +1,8 @@
 package com.example.foodplanner.view.search_meal;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,7 +98,12 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
                 .map(CharSequence::toString)
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(
                         query->{
-                            getsearchedmeal(query);
+                            if(!isNetworkAvailable()){
+                                Toast.makeText(SearchMealFragment.this.getContext(), "Check Your Internet", Toast.LENGTH_SHORT).show();
+                            }else{
+                                getsearchedmeal(query);
+                            }
+
                         },
 
                         throwable -> {
@@ -151,7 +159,7 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     if (isChecked) {
                         String chipText = chip.getText().toString();
-                        Toast.makeText(SearchMealFragment.this.getContext(), chipText, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(SearchMealFragment.this.getContext(), chipText, Toast.LENGTH_SHORT).show();
                         switch (chipText) {
                             case "category":
 
@@ -162,26 +170,24 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
                             case "country":
                                 initallareaViews();
                                 searchPresenter.getArea();
-                              // getArea();
-                                // Handle ingredients logic here
+
                                 break;
                         }
                     }else{
 
                         String chipText = chip.getText().toString();
-                        Toast.makeText(SearchMealFragment.this.getContext(), chipText, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(SearchMealFragment.this.getContext(), chipText, Toast.LENGTH_SHORT).show();
                         switch (chipText) {
                             case "category":
                                 initallcategoryViews();
                                categoryAdapterSrch.changeData(new ArrayList<>());
-                               // searchPresenter.getCategory();
+
                                 break;
 
                             case "country":
-                               // initallareaViews();
+
                                 areaAdaptersrch.changeData(new ArrayList<>());
-                                // getArea();
-                                // Handle ingredients logic here
+
                                 break;
                         }
                     }
@@ -200,14 +206,16 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mealsDetailResponse ->
-                        {meals.clear();
+                        { if (mealsDetailResponse.getMeals() != null && !mealsDetailResponse.getMeals().isEmpty()) {
+                            meals.clear();
                             meals.addAll( mealsDetailResponse.getMeals());
-                            resultSearchAdapter.changeData(meals);
-                          // MealsDetail target_mealsDetail = mealsDetailResponse.getMeals().get(0);
+                            resultSearchAdapter.changeData(meals);}
+                            else{
+                            Toast.makeText(requireContext(), "No meals found", Toast.LENGTH_SHORT).show();
+                            meals.clear();
+                            resultSearchAdapter.changeData(meals);  // Clear the adapter if no results
+                        }
 
-                         //   Log.i("TAG", "mealsDetailResponse.getMeals().get(0)=" + target_mealsDetail);
-                           // Toast.makeText(SearchMealFragment.this.getContext(), target_mealsDetail.getStrMeal(), Toast.LENGTH_SHORT).show();
-                          //  setdta(target_mealsDetail);
 
                         }
                         ,throwable ->
@@ -221,31 +229,15 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
                 ) );
     }
 
-//   void getArea(){
-//
-//
-//       Single<AreaItemResponse> areaList   =searchPresenter.getArea();
-//
-//  Log.i("TAG", "areaListList " +areaList);
-//       areaList.subscribeOn(Schedulers.io())
-//               .observeOn(AndroidSchedulers.mainThread())
-//               .subscribe(item -> {
-//                   List<AreaItem> mm=item.getAreasList();
-//                  String ar= mm.get(0).getStrArea();
-//                           Toast.makeText(SearchMealFragment.this.getContext(), ar, Toast.LENGTH_SHORT).show();
-//                           areaAdaptersrch.changeData(item.getAreasList());
-//
-//                           areaRecyclerView.setAdapter(areaAdaptersrch);
-//                       },
-//                       throwable -> {
-//                           Log.i("TAG", "showCategoryDetail: unable to show products because: " + throwable.getMessage());
-//
-//                           Toast.makeText(SearchMealFragment.this.getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//               });
-//
-//
-//   }
-    void getIngredients(){}
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnected();
+        }
+        return false;
+    }
 
     @Override
     public void showCategorySuccessMessage(List<CategoriesItem> categoriesItems) {
@@ -260,7 +252,7 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
     @Override
     public void showareaSuccessMessage(List<AreaItem> areaItems) {
      String s=   areaItems.get(1).getStrArea();
-        Toast.makeText(SearchMealFragment.this.getContext(), s, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(SearchMealFragment.this.getContext(), s, Toast.LENGTH_SHORT).show();
        areaAdaptersrch.changeData(areaItems);
     }
 
@@ -273,12 +265,25 @@ mealrecyclerView=view.findViewById(R.id.mealnameRecyclerView_search);
     public void onCategoryClick(CategoriesItem category) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("category", (Serializable) category);
-        Toast.makeText(requireActivity(), "category" + category, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(requireActivity(), "category" + category, Toast.LENGTH_SHORT).show();
         Navigation.findNavController(requireView()).navigate(R.id.action_searchMealFragment_to_mealFragment, bundle);
     }
 
     @Override
     public void onareaClick(AreaItem area) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("category", (Serializable) area);
+      //  Toast.makeText(requireActivity(), "category" + area, Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_searchMealFragment_to_mealFragment, bundle);
+
+    }
+
+    @Override
+    public void onmealClick(MealsDetail meal) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("categorydetails", (Serializable) meal);
+       // Toast.makeText(requireActivity(), "categorydetails" + meal, Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_searchMealFragment_to_mealDetailsFragment, bundle);
 
     }
 }

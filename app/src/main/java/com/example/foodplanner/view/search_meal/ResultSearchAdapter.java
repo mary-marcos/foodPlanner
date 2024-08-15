@@ -56,7 +56,7 @@ public class ResultSearchAdapter extends RecyclerView.Adapter<ResultSearchAdapte
                     @Override
                     public void onClick(View v) {
                         if (onmealClickListener != null) {
-                           // onmealClickListener.onmealClick(mealsItem);
+                            onmealClickListener.onmealClick(mealsItem);
                         }
                     }
                 }
