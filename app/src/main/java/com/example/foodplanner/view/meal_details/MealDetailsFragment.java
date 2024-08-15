@@ -213,7 +213,7 @@ HomeActivity homeActivity;
         }
         else if (retreveItem instanceof WeekPlan) {
             retrevedPlan  = (WeekPlan) retreveItem;
-       
+
 
             mymealId=retrevedPlan.getIdMeal();
             getmeal(mymealId);
